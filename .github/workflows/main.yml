@@ -1,0 +1,24 @@
+name: Build Next.js with Bun
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4 
+      - uses: oven-sh/setup-bun@v2
+      - name: Install dependencies and build
+        run: |
+          bun install
+          bun run build
+        env:
+          NODE_ENV: production
+
