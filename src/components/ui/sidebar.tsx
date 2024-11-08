@@ -1,8 +1,11 @@
 'use client'
 
+import SidebarItem from '@/components/ui/sidebar-item'
+import { groups } from '@/constants/routes'
+import { useAuth } from '@/providers/auth.provider'
 import { SideBarContext, SideBarSetterContext } from '@/providers/sidebar.provider'
-import Link from 'next/link'
 import { useContext } from 'react'
+
 const ModalOverlay = ({ toggleSideBar }: { toggleSideBar: () => void }) => {
   return (
     <div
@@ -13,6 +16,7 @@ const ModalOverlay = ({ toggleSideBar }: { toggleSideBar: () => void }) => {
   )
 }
 export default function SideBar() {
+  const { user } = useAuth()
   const show = useContext(SideBarContext)
   const setter = useContext(SideBarSetterContext)
   const toggleSideBar = () => {
@@ -25,16 +29,9 @@ export default function SideBar() {
           show ? 'ml-0' : 'ml-[-250px] md:ml-0'
         }`}
       >
-        <ul className="z-51">
-          <li>
-            <Link href="/platform/home" onKeyDown={toggleSideBar} onClick={toggleSideBar}>
-              Home
-            </Link>
-            <Link href="/platform/policies" onKeyDown={toggleSideBar} onClick={toggleSideBar}>
-              Politicas
-            </Link>
-          </li>
-        </ul>
+        <SidebarItem group={groups.administration} />
+        <SidebarItem group={groups.sells} />
+        <SidebarItem group={groups.reports} />
       </div>
       {show ? <ModalOverlay toggleSideBar={toggleSideBar} /> : <></>}
     </>
