@@ -6,6 +6,7 @@ import { NextUIProvider } from '@nextui-org/system'
 import type React from 'react'
 import { Toaster } from 'sonner'
 
+
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
   variable: '--font-geist-sans',
@@ -37,6 +38,7 @@ export default function RootLayout({
           </AuthProvider>
         </NextUIProvider>
       </body>
+
     </html>
   )
 }
