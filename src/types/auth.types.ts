@@ -1,4 +1,4 @@
-export type LoginResponse = {
+export type UserData = {
   accessToken: string
   username: string
   name: string
@@ -14,4 +14,11 @@ export type LoginRequest = {
 
 export type Role = {
   role: string
+}
+
+export type AuthContextType = {
+  isLogged: boolean
+  user: UserData | null
+  login: (username: string, password: string) => void
+  logout: () => void
 }

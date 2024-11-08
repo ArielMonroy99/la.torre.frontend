@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
+import { AuthProvider } from '@/providers/auth.provider'
 import { NextUIProvider } from '@nextui-org/system'
 import type React from 'react'
 import { Toaster } from 'sonner'
@@ -30,8 +31,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NextUIProvider>
-          <Toaster />
-          {children}
+          <AuthProvider>
+            <Toaster />
+            {children}
+          </AuthProvider>
         </NextUIProvider>
       </body>
     </html>
