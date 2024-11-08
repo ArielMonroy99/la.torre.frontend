@@ -3,9 +3,8 @@ import localFont from 'next/font/local'
 import './globals.css'
 import { AuthProvider } from '@/providers/auth.provider'
 import { NextUIProvider } from '@nextui-org/system'
-import type React from 'react'
+import type { ReactNode } from 'react'
 import { Toaster } from 'sonner'
-
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -26,7 +25,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: ReactNode
 }>) {
   return (
     <html lang="en">
@@ -38,7 +37,6 @@ export default function RootLayout({
           </AuthProvider>
         </NextUIProvider>
       </body>
-
     </html>
   )
 }
