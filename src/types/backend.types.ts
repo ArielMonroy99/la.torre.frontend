@@ -15,7 +15,8 @@ export type QueryParamsDto = {
   limit?: number
   filter?: string
   order?: string
-  direction?: string
+  sort?: string
+  status?: string
 }
 
 export type Pagination<T> = {
