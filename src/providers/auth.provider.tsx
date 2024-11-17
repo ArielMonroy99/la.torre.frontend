@@ -25,9 +25,12 @@ export function AuthProvider({ children }: Props) {
         return
       }
       setUser(result)
+    } else {
+      redirect('/login')
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     initialize()
   }, [])

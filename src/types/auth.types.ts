@@ -4,7 +4,7 @@ export type UserData = {
   name: string
   lastname: string
   email: string
-  roles: Role[]
+  role: Role
 }
 
 export type LoginRequest = {

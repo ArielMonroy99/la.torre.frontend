@@ -77,4 +77,12 @@ export const routes: Route[] = [
     icon: Icons.reports,
     roles: [Roles.ADMINISTRATOR],
   },
+  {
+    id: 8,
+    name: 'Políticas',
+    group: groups.administration,
+    route: '/platform/policies',
+    icon: Icons.policies,
+    roles: [Roles.ADMINISTRATOR],
+  },
 ]
