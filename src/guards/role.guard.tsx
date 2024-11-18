@@ -14,5 +14,5 @@ export default function RoleGuard({ children, permitedRoles }: RoleGuardProps) {
     return <>{children}</>
   }
 
-  return <> FORBIDDEN </>
+  return <> {user && <span>Forbiden</span>}</>
 }

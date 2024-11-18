@@ -3,8 +3,9 @@ import localFont from 'next/font/local'
 import './globals.css'
 import { AuthProvider } from '@/providers/auth.provider'
 import { NextUIProvider } from '@nextui-org/system'
-import type { ReactNode } from 'react'
+import { Suspense, type ReactNode } from 'react'
 import { Toaster } from 'sonner'
+import Loading from './loading'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
