@@ -3,9 +3,9 @@ import localFont from 'next/font/local'
 import './globals.css'
 import { AuthProvider } from '@/providers/auth.provider'
 import { NextUIProvider } from '@nextui-org/system'
-import { Suspense, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { Toaster } from 'sonner'
-import Loading from './loading'
+import Modal from '@/components/modal/modal'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -35,6 +35,7 @@ export default function RootLayout({
           <AuthProvider>
             <Toaster />
             {children}
+            <Modal />
           </AuthProvider>
         </NextUIProvider>
       </body>

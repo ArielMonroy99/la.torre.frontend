@@ -7,8 +7,11 @@ import type { ColumnDescriptor } from '@/types/table.types'
 import { Icon } from '@iconify/react'
 import { Pagination } from '@nextui-org/pagination'
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/table'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import TopContent from '../table/top.content'
+import dynamic from 'next/dynamic'
+import { useModal } from '@/hooks/useModal'
+import { Button } from '@nextui-org/button'
 
 const columns: ColumnDescriptor[] = [
   { name: 'Objeto', id: 'object', allowsSorting: true },
@@ -20,6 +23,7 @@ const columns: ColumnDescriptor[] = [
 const INITIAL_VISIBLE_COLUMNS = ['object', 'subject', 'action', 'actions']
 
 export default function PolicyTable() {
+  const { openModal } = useModal()
   const {
     filterValue,
     visibleColumns,
@@ -40,23 +44,34 @@ export default function PolicyTable() {
     initialSortDescriptor: { column: 'object', direction: 'descending' },
     fetchAction: getPoliciesAction,
   })
-
+  const ModalContent = dynamic(import('@/components/modal/modal.content'), { loading: () => <p>loading</p> })
   useEffect(() => {
     loadItems()
   }, [loadItems])
 
+  const openAddModal = useCallback(() => {
+    openModal({
+      modal: ModalContent,
+      title: 'titulo',
+      hasFooter: false,
+    })
+  }, [openModal, ModalContent])
+
   const topContent = useMemo(() => {
     return (
-      <TopContent
-        filterValue={filterValue}
-        onRowsPerPageChange={onRowsPerPageChange}
-        onSearchChange={onSearchChange}
-        setVisibleColumns={setVisibleColumns}
-        visibleColumns={visibleColumns}
-        columns={columns}
-      />
+      <div>
+        <TopContent
+          filterValue={filterValue}
+          onRowsPerPageChange={onRowsPerPageChange}
+          onSearchChange={onSearchChange}
+          setVisibleColumns={setVisibleColumns}
+          visibleColumns={visibleColumns}
+          columns={columns}
+        />
+        <Button onPress={openAddModal}>Abrir</Button>
+      </div>
     )
-  }, [filterValue, visibleColumns, onSearchChange, setVisibleColumns, onRowsPerPageChange])
+  }, [filterValue, visibleColumns, onSearchChange, setVisibleColumns, onRowsPerPageChange, openAddModal])
 
   const bottomContent = useMemo(() => {
     return (
