@@ -1,17 +1,16 @@
 import { getPoliciesAction } from '@/actions/policies.actions'
 import PolicyTableCell from '@/components/policies/policie.table-cell'
 import { Icons } from '@/constants/icons'
+import { useModal } from '@/hooks/useModal'
 import { useTable } from '@/hooks/useTable'
 import type { Policy } from '@/types/policy.types'
 import type { ColumnDescriptor } from '@/types/table.types'
 import { Icon } from '@iconify/react'
+import { Button } from '@nextui-org/button'
 import { Pagination } from '@nextui-org/pagination'
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/table'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import TopContent from '../table/top.content'
-import { Button } from '@nextui-org/button'
-import { useDisclosure } from '@nextui-org/modal'
-import CustomModal from '../modal/modal'
 
 const columns: ColumnDescriptor[] = [
   { name: 'Objeto', id: 'object', allowsSorting: true },
@@ -23,7 +22,6 @@ const columns: ColumnDescriptor[] = [
 const INITIAL_VISIBLE_COLUMNS = ['object', 'subject', 'action', 'actions']
 
 export default function PolicyTable() {
-  const { isOpen, onOpenChange, onOpen } = useDisclosure()
   const {
     filterValue,
     visibleColumns,
@@ -49,6 +47,12 @@ export default function PolicyTable() {
     loadItems()
   }, [loadItems])
 
+  const { openModal } = useModal()
+
+  const openAddModal = useCallback(() => {
+    openModal('Agregar', <div>Contenido</div>)
+  }, [openModal])
+
   const topContent = useMemo(() => {
     return (
       <div>
@@ -60,14 +64,14 @@ export default function PolicyTable() {
           visibleColumns={visibleColumns}
           columns={columns}
           actions={[
-            <Button key="agregar" onPress={onOpen}>
+            <Button key="agregar" onPress={openAddModal}>
               Agregar
             </Button>,
           ]}
         />
       </div>
     )
-  }, [filterValue, visibleColumns, onSearchChange, setVisibleColumns, onRowsPerPageChange, onOpen])
+  }, [filterValue, visibleColumns, onSearchChange, setVisibleColumns, onRowsPerPageChange, openAddModal])
 
   const bottomContent = useMemo(() => {
     return (
@@ -133,7 +137,6 @@ export default function PolicyTable() {
           )}
         </TableBody>
       </Table>
-      <CustomModal isOpen={isOpen} onOpenChange={onOpenChange} />
     </>
   )
 }

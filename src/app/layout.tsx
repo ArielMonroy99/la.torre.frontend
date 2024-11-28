@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
+import CustomModal from '@/components/modal/modal'
+import { ModalProvider } from '@/hooks/useModal'
 import { AuthProvider } from '@/providers/auth.provider'
 import { NextUIProvider } from '@nextui-org/system'
 import type { ReactNode } from 'react'
@@ -31,10 +33,13 @@ export default function RootLayout({
     <html lang="en" className="overflow-hidden">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NextUIProvider>
-          <AuthProvider>
-            <Toaster />
-            {children}
-          </AuthProvider>
+          <ModalProvider>
+            <AuthProvider>
+              <Toaster />
+              {children}
+              <CustomModal />
+            </AuthProvider>
+          </ModalProvider>
         </NextUIProvider>
       </body>
     </html>
