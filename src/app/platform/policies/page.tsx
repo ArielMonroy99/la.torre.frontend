@@ -6,10 +6,12 @@ import RoleGuard from '@/guards/role.guard'
 
 export default function Page() {
   return (
-    <RoleGuard permitedRoles={[Roles.ADMINISTRATOR]}>
-      <TableContainer title="Políticas">
-        <PolicyTable />
-      </TableContainer>
-    </RoleGuard>
+    <>
+      <RoleGuard permitedRoles={[Roles.ADMINISTRATOR]}>
+        <TableContainer title="Políticas">
+          <PolicyTable />
+        </TableContainer>
+      </RoleGuard>
+    </>
   )
 }

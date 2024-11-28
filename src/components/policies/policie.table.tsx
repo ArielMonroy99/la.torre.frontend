@@ -7,11 +7,11 @@ import type { ColumnDescriptor } from '@/types/table.types'
 import { Icon } from '@iconify/react'
 import { Pagination } from '@nextui-org/pagination'
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/table'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import TopContent from '../table/top.content'
-import dynamic from 'next/dynamic'
-import { useModal } from '@/hooks/useModal'
 import { Button } from '@nextui-org/button'
+import { useDisclosure } from '@nextui-org/modal'
+import CustomModal from '../modal/modal'
 
 const columns: ColumnDescriptor[] = [
   { name: 'Objeto', id: 'object', allowsSorting: true },
@@ -23,7 +23,7 @@ const columns: ColumnDescriptor[] = [
 const INITIAL_VISIBLE_COLUMNS = ['object', 'subject', 'action', 'actions']
 
 export default function PolicyTable() {
-  const { openModal } = useModal()
+  const { isOpen, onOpenChange, onOpen } = useDisclosure()
   const {
     filterValue,
     visibleColumns,
@@ -44,18 +44,10 @@ export default function PolicyTable() {
     initialSortDescriptor: { column: 'object', direction: 'descending' },
     fetchAction: getPoliciesAction,
   })
-  const ModalContent = dynamic(import('@/components/modal/modal.content'), { loading: () => <p>loading</p> })
+
   useEffect(() => {
     loadItems()
   }, [loadItems])
-
-  const openAddModal = useCallback(() => {
-    openModal({
-      modal: ModalContent,
-      title: 'titulo',
-      hasFooter: false,
-    })
-  }, [openModal, ModalContent])
 
   const topContent = useMemo(() => {
     return (
@@ -67,11 +59,15 @@ export default function PolicyTable() {
           setVisibleColumns={setVisibleColumns}
           visibleColumns={visibleColumns}
           columns={columns}
+          actions={[
+            <Button key="agregar" onPress={onOpen}>
+              Agregar
+            </Button>,
+          ]}
         />
-        <Button onPress={openAddModal}>Abrir</Button>
       </div>
     )
-  }, [filterValue, visibleColumns, onSearchChange, setVisibleColumns, onRowsPerPageChange, openAddModal])
+  }, [filterValue, visibleColumns, onSearchChange, setVisibleColumns, onRowsPerPageChange, onOpen])
 
   const bottomContent = useMemo(() => {
     return (
@@ -98,43 +94,46 @@ export default function PolicyTable() {
   }, [visibleColumns])
 
   return (
-    <Table
-      aria-labelledby="Policies"
-      topContent={topContent}
-      topContentPlacement={'outside'}
-      bottomContent={bottomContent}
-      bottomContentPlacement="inside"
-      sortDescriptor={sortDescriptor}
-      onSortChange={setSortDescriptor}
-      isVirtualized
-      isHeaderSticky
-      isCompact
-    >
-      <TableHeader columns={headerColumns}>
-        {column => (
-          <TableColumn key={column.id} {...column}>
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody
-        items={data}
-        emptyContent={
-          <div className="flex">
-            No data <Icon icon={Icons.reports} />
-          </div>
-        }
+    <>
+      <Table
+        aria-labelledby="Policies"
+        topContent={topContent}
+        topContentPlacement={'outside'}
+        bottomContent={bottomContent}
+        bottomContentPlacement="inside"
+        sortDescriptor={sortDescriptor}
+        onSortChange={setSortDescriptor}
+        isVirtualized
+        isHeaderSticky
+        isCompact
       >
-        {item => (
-          <TableRow key={item.object + item.subject + item.action}>
-            {columnKey => (
-              <TableCell textValue="cell">
-                <PolicyTableCell columnKey={columnKey} item={item} />
-              </TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+        <TableHeader columns={headerColumns}>
+          {column => (
+            <TableColumn key={column.id} {...column}>
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody
+          items={data}
+          emptyContent={
+            <div className="flex">
+              No data <Icon icon={Icons.reports} />
+            </div>
+          }
+        >
+          {item => (
+            <TableRow key={item.object + item.subject + item.action}>
+              {columnKey => (
+                <TableCell textValue="cell">
+                  <PolicyTableCell columnKey={columnKey} item={item} />
+                </TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      <CustomModal isOpen={isOpen} onOpenChange={onOpenChange} />
+    </>
   )
 }

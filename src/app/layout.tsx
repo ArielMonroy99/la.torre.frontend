@@ -5,7 +5,6 @@ import { AuthProvider } from '@/providers/auth.provider'
 import { NextUIProvider } from '@nextui-org/system'
 import type { ReactNode } from 'react'
 import { Toaster } from 'sonner'
-import Modal from '@/components/modal/modal'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -35,7 +34,6 @@ export default function RootLayout({
           <AuthProvider>
             <Toaster />
             {children}
-            <Modal />
           </AuthProvider>
         </NextUIProvider>
       </body>

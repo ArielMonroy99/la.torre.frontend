@@ -2,7 +2,6 @@
 
 import SidebarItem from '@/components/ui/sidebar-item'
 import { groups } from '@/constants/routes'
-import { useAuth } from '@/providers/auth.provider'
 import { SideBarContext, SideBarSetterContext } from '@/providers/sidebar.provider'
 import { useContext } from 'react'
 
@@ -16,7 +15,6 @@ const ModalOverlay = ({ toggleSideBar }: { toggleSideBar: () => void }) => {
   )
 }
 export default function SideBar() {
-  const { user } = useAuth()
   const show = useContext(SideBarContext)
   const setter = useContext(SideBarSetterContext)
   const toggleSideBar = () => {
@@ -25,7 +23,7 @@ export default function SideBar() {
   return (
     <>
       <div
-        className={`bg-background w-[250px] transition-[margin-left] ease-in-out duration-500 fixed md:static top-0 bottom-0 left-0 z-[51] border-r-1 ${
+        className={`bg-background w-[250px] transition-[margin-left] ease-in-out duration-500 fixed md:static top-0 bottom-0 left-0 border-r-1 ${
           show ? 'ml-0' : 'ml-[-250px] md:ml-0'
         }`}
       >

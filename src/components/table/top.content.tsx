@@ -5,6 +5,7 @@ import { Button } from '@nextui-org/button'
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/dropdown'
 import { Input } from '@nextui-org/input'
 import type { Selection } from '@nextui-org/table'
+import type { ReactNode } from 'react'
 
 type TopContentProp = {
   filterValue: string
@@ -13,6 +14,7 @@ type TopContentProp = {
   setVisibleColumns: any
   onRowsPerPageChange: any
   columns: ColumnDescriptor[]
+  actions?: ReactNode[]
 }
 
 export default function TopContent({
@@ -22,6 +24,7 @@ export default function TopContent({
   setVisibleColumns,
   onRowsPerPageChange,
   columns,
+  actions,
 }: TopContentProp) {
   return (
     <div className="flex justify-between">
@@ -62,10 +65,7 @@ export default function TopContent({
             ))}
           </DropdownMenu>
         </Dropdown>
-
-        <Button variant="solid" className="self-end">
-          Agregar
-        </Button>
+        {actions?.map(act => act)}
       </div>
     </div>
   )
