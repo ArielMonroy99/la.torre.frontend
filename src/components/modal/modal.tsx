@@ -2,9 +2,11 @@
 import { useModal } from '@/hooks/useModal'
 import { Button } from '@nextui-org/button'
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/modal'
+import dynamic from 'next/dynamic'
 
 export default function CustomModal() {
   const { isOpen, onOpenChange, title, content } = useModal()
+  const Content = dynamic(() => import(`${content}`), { ssr: false })
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur" size="lg" placement="auto">
       <ModalContent>
@@ -12,7 +14,7 @@ export default function CustomModal() {
           <>
             <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
             <ModalBody>
-              <p>{content}</p>
+              <Content />
             </ModalBody>
             <ModalFooter>
               <Button color="danger" variant="light" onPress={onClose}>

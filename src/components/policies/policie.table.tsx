@@ -50,7 +50,7 @@ export default function PolicyTable() {
   const { openModal } = useModal()
 
   const openAddModal = useCallback(() => {
-    openModal('Agregar', <div>Contenido</div>)
+    openModal('Agregar', '@/components/forms/policies')
   }, [openModal])
 
   const topContent = useMemo(() => {

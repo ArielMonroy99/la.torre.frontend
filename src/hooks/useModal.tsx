@@ -7,15 +7,24 @@ const ModalContext = createContext<{
   onOpen: () => void
   onClose: () => void
   onOpenChange: () => void
-  content: ReactNode
+  content: string
   title: string
   setTitle: (title: string) => void
-  setContent: (content: ReactNode) => void
-} | null>(null)
+  setContent: (content: string) => void
+}>({
+  isOpen: false,
+  onOpen: () => {},
+  onClose: () => {},
+  onOpenChange: () => {},
+  content: 'Modal content',
+  title: 'Modal',
+  setTitle: () => {},
+  setContent: () => {},
+})
 
 export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
-  const [content, setContent] = useState<ReactNode | null>(null)
+  const [content, setContent] = useState<string>('Modal content')
   const [title, setTitle] = useState<string>('Modal')
 
   return (
@@ -27,12 +36,12 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
 
 export const useModal = () => {
   const context = useContext(ModalContext)
-  const { isOpen, onOpen, onClose, onOpenChange, setContent, setTitle, title, content } = context || {}
-  const openModal = (title: string, content: ReactNode) => {
+  const { isOpen, onOpen, onClose, onOpenChange, setContent, setTitle, title, content } = context
+  const openModal = (title: string, content: string) => {
     if (setTitle && setContent && onOpen) {
       setTitle(title)
       setContent(content)
-      alert(`${title} ${content}`)
+      console.log(content)
       onOpen()
     }
   }
