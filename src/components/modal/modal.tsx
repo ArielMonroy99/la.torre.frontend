@@ -1,14 +1,15 @@
 'use client'
+import { Modals } from '@/constants/modals'
 import { useModal } from '@/hooks/useModal'
 import { Button } from '@nextui-org/button'
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/modal'
-import dynamic from 'next/dynamic'
 
 export default function CustomModal() {
   const { isOpen, onOpenChange, title, content } = useModal()
-  const Content = dynamic(() => import(`${content}`), { ssr: false })
+  const Content = Modals.get('POLICIES')
+  if (!Content) return null
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur" size="lg" placement="auto">
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
         {onClose => (
           <>

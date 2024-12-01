@@ -11,7 +11,5 @@ export const getPoliciesAction = createServerAction<QueryParamsDto, ListResponse
 
   const respuesta = await axiosServer.get<ListResponse<Policy>>(`${endpoints.getPolicies}${params}`)
   const { data } = respuesta
-  console.log(data.data.content)
-
   return { status: 'success', ...data }
 })

@@ -98,45 +98,43 @@ export default function PolicyTable() {
   }, [visibleColumns])
 
   return (
-    <>
-      <Table
-        aria-labelledby="Policies"
-        topContent={topContent}
-        topContentPlacement={'outside'}
-        bottomContent={bottomContent}
-        bottomContentPlacement="inside"
-        sortDescriptor={sortDescriptor}
-        onSortChange={setSortDescriptor}
-        isVirtualized
-        isHeaderSticky
-        isCompact
+    <Table
+      aria-labelledby="Policies"
+      topContent={topContent}
+      topContentPlacement={'outside'}
+      bottomContent={bottomContent}
+      bottomContentPlacement="inside"
+      sortDescriptor={sortDescriptor}
+      onSortChange={setSortDescriptor}
+      isVirtualized
+      isHeaderSticky
+      isCompact
+    >
+      <TableHeader columns={headerColumns}>
+        {column => (
+          <TableColumn key={column.id} {...column}>
+            {column.name}
+          </TableColumn>
+        )}
+      </TableHeader>
+      <TableBody
+        items={data}
+        emptyContent={
+          <div className="flex">
+            No data <Icon icon={Icons.reports} />
+          </div>
+        }
       >
-        <TableHeader columns={headerColumns}>
-          {column => (
-            <TableColumn key={column.id} {...column}>
-              {column.name}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody
-          items={data}
-          emptyContent={
-            <div className="flex">
-              No data <Icon icon={Icons.reports} />
-            </div>
-          }
-        >
-          {item => (
-            <TableRow key={item.object + item.subject + item.action}>
-              {columnKey => (
-                <TableCell textValue="cell">
-                  <PolicyTableCell columnKey={columnKey} item={item} />
-                </TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </>
+        {item => (
+          <TableRow key={item.object + item.subject + item.action}>
+            {columnKey => (
+              <TableCell textValue="cell">
+                <PolicyTableCell columnKey={columnKey} item={item} />
+              </TableCell>
+            )}
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
   )
 }

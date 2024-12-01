@@ -18,7 +18,7 @@ export default function PolicyForm({ policy }: { policy?: Policy }) {
   } = useForm<Policy>({ resolver: zodResolver(policieSchema) })
   return (
     <form>
-      <SelectTorre form={'object'} message={errors.object?.message} register={register} setValue={setValue} items={roles} />
+      <SelectTorre form={'object'} label="Objeto" message={errors.object?.message} register={register} setValue={setValue} items={roles} />
     </form>
   )
 }

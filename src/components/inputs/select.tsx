@@ -16,7 +16,15 @@ export default function SelectTorre({ form, message, register, items, setValue, 
   return (
     <div>
       <input {...register(form)} hidden />
-      <Select form={form} items={items} isInvalid={!!message} errorMessage={message} {...props} onSelectionChange={handleChange}>
+      <Select
+        form={form}
+        items={items}
+        isInvalid={!!message}
+        errorMessage={message}
+        {...props}
+        onSelectionChange={handleChange}
+        aria-labelledby="Select"
+      >
         {items.map(item => (
           <SelectItem key={item.key}>{item.label}</SelectItem>
         ))}
