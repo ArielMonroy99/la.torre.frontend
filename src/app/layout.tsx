@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
-import CustomModal from '@/components/modal/modal'
+import CustomModal from '@/components/ui/modal/modal'
 import { ModalProvider } from '@/hooks/useModal'
 import { AuthProvider } from '@/providers/auth.provider'
 import { NextUIProvider } from '@nextui-org/system'

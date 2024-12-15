@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import type { JSX } from 'react'
+import { type JSX, useEffect, useRef, useState, useTransition } from 'react'
 import {
   type FieldErrors,
+  type FieldPath,
   type UseFormGetValues,
   type UseFormRegister,
   type UseFormReset,
@@ -25,17 +26,46 @@ type Props = {
     trigger: UseFormTrigger<any>
     getValues: UseFormGetValues<any>
   }) => JSX.Element
-  action: string | ((formData: FormData) => void | Promise<void>) | undefined
-
+  action: (payload: FormData) => any | Promise<any>
   schema: ZodSchema
 }
 
 export default function FormContainer({ children, action, schema }: Props) {
-  const { register, reset, resetField, setValue, trigger, getValues, formState } = useForm({
+  const { register, reset, resetField, setValue, trigger, getValues, formState, setError, handleSubmit } = useForm({
+    mode: 'onChange',
     resolver: zodResolver(schema),
   })
+
+  const isInitialMount = useRef(0)
+  const [state, setState] = useState<any>(null) // Use local state to store the result
+  const [isPending, startTransition] = useTransition()
+
+  const [localAction, setLocalAction] = useState(() => action) // Store the action
+
+  useEffect(() => {
+    trigger(isInitialMount.current < 2 ? '' : undefined)
+    if (isInitialMount.current < 2) {
+      isInitialMount.current = isInitialMount.current + 1
+    }
+  }, [trigger])
+
+  useEffect(() => {
+    if (state?.status === 'error') {
+      state.errors?.forEach((error: any) => {
+        setError(error.path as FieldPath<any>, { message: error.message })
+      })
+    }
+  }, [state, setError])
+
+  const onSubmit = handleSubmit(async formData => {
+    startTransition(async () => {
+      const result = await localAction(formData as FormData)
+      setState(result) // Store result in local state
+    })
+  })
+
   return (
-    <form action={action}>
+    <form onSubmit={onSubmit}>
       {children({
         register,
         reset,
@@ -43,8 +73,8 @@ export default function FormContainer({ children, action, schema }: Props) {
         setValue,
         isValid: formState.isValid,
         errors: formState.errors,
-        state: formState,
-        isPending: formState.isSubmitting,
+        state: state,
+        isPending: isPending,
         trigger,
         getValues,
       })}
