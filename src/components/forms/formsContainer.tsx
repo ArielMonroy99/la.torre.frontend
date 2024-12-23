@@ -11,6 +11,7 @@ import {
   type UseFormTrigger,
   useForm,
 } from 'react-hook-form'
+import { toast } from 'sonner'
 import type { ZodSchema } from 'zod'
 
 type Props = {
@@ -57,15 +58,17 @@ export default function FormContainer({ children, action, schema }: Props) {
     }
   }, [state, setError])
 
-  const onSubmit = handleSubmit(async formData => {
-    startTransition(async () => {
-      const result = await localAction(formData as FormData)
-      setState(result) // Store result in local state
+  const handleSubmitAction = async (payload: any) => {
+    const formData = new FormData()
+    Object.entries(payload).forEach(([key, value]) => {
+      formData.append(key, value as string)
     })
-  })
+    const result = await action(formData)
+    toast(result.status)
+  }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit(handleSubmitAction)}>
       {children({
         register,
         reset,

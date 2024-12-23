@@ -1,12 +1,8 @@
-import { createPolicyAction } from '@/actions/policies.actions'
 import InputTorre from '@/components/inputs/input'
 import SelectTorre from '@/components/inputs/select'
-import { policieSchema } from '@/components/schemas/policies.schema'
 import type { Policy } from '@/types/policy.types'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@nextui-org/button'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
+import type { UseFormRegister, UseFormSetValue } from 'react-hook-form'
 
 const roles = [
   { label: 'ADMINISTRADOR', key: 'ADMINISTRATOR' },
@@ -20,25 +16,16 @@ const acciones = [
   { label: 'PUT', key: 'PUT' },
   { label: 'DELETE', key: 'DELETE' },
 ]
-export default function PolicyForm() {
-  const {
-    register,
-    formState: { errors },
-    setValue,
-    handleSubmit,
-  } = useForm<Policy>({ resolver: zodResolver(policieSchema) })
 
-  const handleSubmitAction = async (payload: Policy) => {
-    const formData = new FormData()
-    Object.entries(payload).forEach(([key, value]) => {
-      formData.append(key, value as string)
-    })
-    const result = await createPolicyAction(formData)
-    toast(result.status)
-  }
+type Props = {
+  register: UseFormRegister<Policy>
+  errors: any
+  setValue: UseFormSetValue<Policy>
+}
 
+export default function PolicyForm({ register, errors, setValue }: Props) {
   return (
-    <form onSubmit={handleSubmit(handleSubmitAction)} className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5">
       <InputTorre register={register} form={'object'} errorMessage={errors?.object?.message} label="Objeto" />
       <SelectTorre
         form={'subject'}
@@ -59,6 +46,6 @@ export default function PolicyForm() {
       <Button variant={'solid'} color={'primary'} type={'submit'}>
         Guardar
       </Button>
-    </form>
+    </div>
   )
 }
